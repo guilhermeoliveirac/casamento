@@ -1,0 +1,52 @@
+{% extends 'estoque/base.html' %}
+
+{% block head_content %}
+    <link rel="stylesheet" href="../../static/css/form.css">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Produtos em Estoque</h2>
+
+    <!-- Filtro de Categoria -->
+    <form method="get" action="">
+        <div class="form-group">
+            <label for="categoria">Filtrar por Categoria:</label>
+            <select name="categoria" id="categoria" class="form-control">
+                <option value="">Todas</option>
+                {% for categoria in categorias %}
+                <option value="{{ categoria.id }}" {% if request.GET.categoria == categoria.id|stringformat:"s" %}selected{% endif %}>
+                    {{ categoria.nome }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+    </form>
+
+    <!-- Lista de Produtos em Falta -->
+    <table class="table table-bordered mt-3">
+        <thead class="thead-dark">
+            <tr>
+                <th>Produto</th>
+                <th>Quantidade em Estoque</th>
+                <th>Categoria</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for produto in produtos_existentes %}
+            <tr>
+                <td>{{ produto.produto }}</td>
+                <td>{{ produto.quantidade_em_estoque }}</td> 
+                <td>{{ produto.categoria.nome }}</td>
+                
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">Nenhum produto em falta nesta categoria.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
